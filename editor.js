@@ -11,34 +11,37 @@ function render(){const chat=$('chat');chat.innerHTML='';state.messages.forEach(
 function add(){const type=$('msgType').value,text=$('msgText').value.trim();if(type==='text'&&!text){toast('Escreve uma mensagem primeiro.');return}state.messages.push({sender:$('sender').value,type,text,time:$('msgTime').value||'9:42',duration:$('voiceDuration').value||'0:08'});$('msgText').value='';render();$('msgText').focus()}
 function rr(ctx,x,y,w,h,r,stroke=false){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();if(stroke)ctx.stroke()}
 function drawWhatsapp(ctx,w,h,visible,scroll=1,watermark=true){
- const s=w/390,bottom=h-62*s,headH=105*s,barH=62*s;
- ctx.fillStyle='#f0f2f5';ctx.fillRect(0,0,w,h);
- // Android status bar
- ctx.fillStyle='#f0f2f5';ctx.fillRect(0,0,w,headH);
- ctx.fillStyle='#111b21';ctx.font='500 '+(11*s)+'px Arial';ctx.fillText($('phoneTime').value||'9:41',16*s,17*s);
+ const s=w/390,bottom=h-62*s,headH=105*s,barH=62*s,dark=$('chatTheme')?.value==='dark';
+ const C=dark?{head:'#202c33',bg:'#0b141a',sent:'#005c4b',received:'#202c33',text:'#e9edef',muted:'#8696a0',wall:'#71818a',date:'#182229'}:{head:'#f0f2f5',bg:'#efeae2',sent:'#d9fdd3',received:'#ffffff',text:'#111b21',muted:'#667781',wall:'#aaa397',date:'#e1f3fb'};
+ ctx.fillStyle=C.head;ctx.fillRect(0,0,w,h);
+ // status bar and conversation toolbar
+ ctx.fillStyle=C.text;ctx.font='500 '+(11*s)+'px Arial';ctx.fillText($('phoneTime').value||'9:41',16*s,17*s);
  ctx.textAlign='right';ctx.font=(10*s)+'px Arial';ctx.fillText('▮ ▮ ▰',w-13*s,17*s);ctx.textAlign='left';
- // WhatsApp conversation toolbar
- ctx.fillStyle='#f0f2f5';ctx.fillRect(0,25*s,w,55*s);
- ctx.fillStyle='#54656f';ctx.font=(23*s)+'px Arial';ctx.fillText('‹',10*s,60*s);
+ ctx.fillStyle=C.muted;ctx.font=(23*s)+'px Arial';ctx.fillText('‹',10*s,60*s);
  ctx.fillStyle=dark?'#34434b':'#dfe5e7';ctx.beginPath();ctx.arc(61*s,52*s,17*s,0,Math.PI*2);ctx.fill();
- ctx.fillStyle=C.muted;ctx.font='bold '+(10*s)+'px Arial';ctx.textAlign='center';ctx.fillText(initials($('contact').value||'Contacto'),61*s,56*s);ctx.textAlign='left';
- ctx.fillStyle=C.text;ctx.font='600 '+(14*s)+'px Arial';ctx.fillText(($('contact').value||'Contacto').slice(0,21),86*s,49*s);
+ ctx.fillStyle=C.text;ctx.font='bold '+(10*s)+'px Arial';ctx.textAlign='center';ctx.fillText(initials($('contact').value||'Contacto'),61*s,56*s);ctx.textAlign='left';
+ ctx.font='600 '+(14*s)+'px Arial';ctx.fillText(($('contact').value||'Contacto').slice(0,21),86*s,49*s);
  ctx.fillStyle=C.muted;ctx.font=(9*s)+'px Arial';ctx.fillText('online',86*s,64*s);
- ctx.fillStyle=C.muted;ctx.font=(17*s)+'px Arial';ctx.textAlign='right';ctx.fillText('▣   ☎   ⋮',w-12*s,56*s);ctx.textAlign='left';
+ ctx.textAlign='right';ctx.font=(17*s)+'px Arial';ctx.fillText('▣   ☎   ⋮',w-12*s,56*s);ctx.textAlign='left';
  ctx.strokeStyle=dark?'#34434b':'#d9dfe3';ctx.lineWidth=1*s;ctx.beginPath();ctx.moveTo(0,80*s);ctx.lineTo(w,80*s);ctx.stroke();
- // WhatsApp doodle wallpaper
- ctx.fillStyle='#efeae2';ctx.fillRect(0,headH,w,h-headH);
- ctx.save();ctx.globalAlpha=.13;ctx.strokeStyle='#b9b2a6';ctx.lineWidth=1.1*s;
- for(let yy=115*s;yy<h;yy+=46*s){for(let xx=((Math.floor(yy/(46*s))%2)*23*s);xx<w;xx+=46*s){ctx.beginPath();ctx.arc(xx+10*s,yy+8*s,7*s,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(xx+2*s,yy+25*s);ctx.lineTo(xx+15*s,yy+20*s);ctx.lineTo(xx+22*s,yy+28*s);ctx.stroke()}}
+ // WhatsApp-style patterned wallpaper, different contrast per theme
+ ctx.fillStyle=C.bg;ctx.fillRect(0,headH,w,h-headH);
+ ctx.save();ctx.globalAlpha=dark?.24:.18;ctx.strokeStyle=C.wall;ctx.lineWidth=1.15*s;
+ for(let row=0,yy=112*s;yy<h;yy+=64*s,row++){for(let xx=(row%2?24:0)*s;xx<w;xx+=72*s){
+  const x=xx,y=yy,k=(row+Math.floor(xx/(72*s)))%5;
+  if(k===0){ctx.beginPath();ctx.arc(x+15*s,y+14*s,8*s,0,Math.PI*2);ctx.moveTo(x+20*s,y+20*s);ctx.lineTo(x+25*s,y+25*s);ctx.stroke()}
+  else if(k===1){ctx.beginPath();ctx.moveTo(x+8*s,y+8*s);ctx.lineTo(x+12*s,y+17*s);ctx.lineTo(x+22*s,y+18*s);ctx.lineTo(x+14*s,y+24*s);ctx.lineTo(x+17*s,y+34*s);ctx.lineTo(x+8*s,y+28*s);ctx.lineTo(x,y+34*s);ctx.lineTo(x+3*s,y+23*s);ctx.lineTo(x-4*s,y+17*s);ctx.lineTo(x+6*s,y+16*s);ctx.closePath();ctx.stroke()}
+  else if(k===2){ctx.beginPath();ctx.roundRect(x+2*s,y+5*s,25*s,17*s,5*s);ctx.moveTo(x+8*s,y+22*s);ctx.lineTo(x+5*s,y+29*s);ctx.stroke()}
+  else if(k===3){ctx.beginPath();ctx.arc(x+13*s,y+16*s,11*s,0,Math.PI*2);ctx.moveTo(x+8*s,y+14*s);ctx.arc(x+8*s,y+14*s,1*s,0,Math.PI*2);ctx.moveTo(x+19*s,y+14*s);ctx.arc(x+19*s,y+14*s,1*s,0,Math.PI*2);ctx.moveTo(x+7*s,y+20*s);ctx.quadraticCurveTo(x+13*s,y+27*s,x+20*s,y+20*s);ctx.stroke()}
+  else{ctx.beginPath();ctx.arc(x+13*s,y+14*s,9*s,-.8,2.5);ctx.moveTo(x+19*s,y+20*s);ctx.lineTo(x+26*s,y+27*s);ctx.stroke()}
+ }}
  ctx.restore();
- // date chip
  ctx.fillStyle=C.date;rr(ctx,w/2-42*s,headH+7*s,84*s,22*s,6*s);ctx.fillStyle=C.muted;ctx.font=(9*s)+'px Arial';ctx.textAlign='center';ctx.fillText('TODAY',w/2,headH+22*s);ctx.textAlign='left';
- let y=headH+38*s,items=[];
- ctx.font=(14*s)+'px Arial';
+ let y=headH+38*s,items=[];ctx.font=(14*s)+'px Arial';
  state.messages.slice(0,visible).forEach(m=>{
   let lines=[];
   if(m.type==='voice')lines=['▶   ━━━━━━━━   '+m.duration];
-  else{let line='';m.text.split(/\s+/).forEach(word=>{const test=line?line+' '+word:word;if(ctx.measureText(test).width>w*.69-22*s&&line){lines.push(line);line=word}else line=test});if(line||!lines.length)lines.push(line)}
+  else{let line='';m.text.split(/\\s+/).forEach(word=>{const test=line?line+' '+word:word;if(ctx.measureText(test).width>w*.69-22*s&&line){lines.push(line);line=word}else line=test});if(line||!lines.length)lines.push(line)}
   const bw=Math.min(w*.78,Math.max(94*s,...lines.map(l=>ctx.measureText(l).width+25*s))),bh=lines.length*18*s+24*s;
   items.push({m,y,h:bh,w:bw,lines});y+=bh+7*s;
  });
@@ -46,18 +49,15 @@ function drawWhatsapp(ctx,w,h,visible,scroll=1,watermark=true){
  items.forEach(({m,y:top,h:bh,w:bw,lines})=>{
   const yy=top-offset;if(yy+bh<headH||yy>bottom)return;
   const outgoing=m.sender==='sent',x=outgoing?w-bw-9*s:9*s;
-  ctx.fillStyle=outgoing?'#d9fdd3':'#ffffff';rr(ctx,x,yy,bw,bh,8*s);
-  ctx.fillStyle='#111b21';ctx.font=(14*s)+'px Arial';
-  lines.forEach((line,i)=>ctx.fillText(line,x+9*s,yy+17*s+i*18*s));
-  ctx.font=(8*s)+'px Arial';ctx.fillStyle=C.muted;ctx.textAlign='right';
-  ctx.fillText(m.time+(outgoing?'  ✓✓':''),x+bw-8*s,yy+bh-5*s);ctx.textAlign='left';
+  ctx.fillStyle=outgoing?C.sent:C.received;rr(ctx,x,yy,bw,bh,8*s);
+  ctx.fillStyle=C.text;ctx.font=(14*s)+'px Arial';lines.forEach((line,i)=>ctx.fillText(line,x+9*s,yy+17*s+i*18*s));
+  ctx.font=(8*s)+'px Arial';ctx.fillStyle=C.muted;ctx.textAlign='right';ctx.fillText(m.time+(outgoing?'  ✓✓':''),x+bw-8*s,yy+bh-5*s);ctx.textAlign='left';
  });
- // WhatsApp message composer
- ctx.fillStyle='#f0f2f5';ctx.fillRect(0,h-barH,w,barH);
- ctx.fillStyle='#54656f';ctx.font=(20*s)+'px Arial';ctx.fillText('＋',9*s,h-25*s);
- ctx.fillStyle='#ffffff';rr(ctx,36*s,h-48*s,w-88*s,34*s,18*s);
- ctx.fillStyle='#8696a0';ctx.font=(12*s)+'px Arial';ctx.fillText('Message',49*s,h-27*s);
- ctx.fillStyle=C.muted;ctx.font=(17*s)+'px Arial';ctx.fillText('▣',w-45*s,h-26*s);ctx.beginPath();ctx.arc(w-17*s,h-31*s,13*s,0,Math.PI*2);ctx.fillStyle='#00a884';ctx.fill();ctx.fillStyle='#fff';ctx.font=(12*s)+'px Arial';ctx.textAlign='center';ctx.fillText('●',w-17*s,h-27*s);ctx.textAlign='left';
+ ctx.fillStyle=C.head;ctx.fillRect(0,h-barH,w,barH);
+ ctx.fillStyle=C.muted;ctx.font=(20*s)+'px Arial';ctx.fillText('＋',9*s,h-25*s);
+ ctx.fillStyle=dark?'#2a3942':'#ffffff';rr(ctx,36*s,h-48*s,w-88*s,34*s,18*s);
+ ctx.fillStyle=C.muted;ctx.font=(12*s)+'px Arial';ctx.fillText('Mensagem',49*s,h-27*s);
+ ctx.font=(17*s)+'px Arial';ctx.fillText('▣',w-45*s,h-26*s);ctx.beginPath();ctx.arc(w-17*s,h-31*s,13*s,0,Math.PI*2);ctx.fillStyle='#00a884';ctx.fill();ctx.fillStyle='#fff';ctx.font=(12*s)+'px Arial';ctx.textAlign='center';ctx.fillText('●',w-17*s,h-27*s);ctx.textAlign='left';
  if(watermark){ctx.fillStyle=C.muted;ctx.font='bold '+(8*s)+'px Arial';ctx.textAlign='right';ctx.fillText('FAKECHAT · SIMULAÇÃO',w-10*s,h-68*s);ctx.textAlign='left'}
 }
 function draw(ctx,w,h,visible,scroll=1,watermark=true){if($('platform').value==='whatsapp'){drawWhatsapp(ctx,w,h,visible,scroll,watermark);return}const s=w/390,[head,bg,sent,received]=colors[$('platform').value];ctx.fillStyle='#080808';ctx.fillRect(0,0,w,h);ctx.fillStyle=head;ctx.fillRect(0,0,w,92*s);ctx.fillStyle='#171717';ctx.font=(12*s)+'px monospace';ctx.fillText($('phoneTime').value||'9:41',17*s,20*s);ctx.fillText('▮▮▮ ▰',w-65*s,20*s);ctx.fillStyle='#141512';ctx.beginPath();ctx.arc(34*s,59*s,16*s,0,Math.PI*2);ctx.fill();ctx.fillStyle='#d8ff42';ctx.textAlign='center';ctx.font=(10*s)+'px monospace';ctx.fillText(initials($('contact').value),34*s,62*s);ctx.textAlign='left';ctx.fillStyle='#111';ctx.font='bold '+(14*s)+'px Arial';ctx.fillText(($('contact').value||'Contacto').slice(0,22),59*s,57*s);ctx.font=(9*s)+'px Arial';ctx.fillStyle='#666';ctx.fillText('online',59*s,72*s);ctx.fillStyle=bg;ctx.fillRect(0,92*s,w,h-145*s);let y=108*s;const bottom=h-62*s,items=[];ctx.font=(14*s)+'px Arial';state.messages.slice(0,visible).forEach(m=>{let lines=[];if(m.type==='voice')lines=['▶   〰〰〰〰   '+m.duration];else{let line='';m.text.split(/\s+/).forEach(word=>{const test=line?line+' '+word:word;if(ctx.measureText(test).width>w*.7-20*s&&line){lines.push(line);line=word}else line=test});if(line||!lines.length)lines.push(line)}const bw=Math.min(w*.78,Math.max(88*s,...lines.map(l=>ctx.measureText(l).width+20*s))),bh=lines.length*18*s+24*s;items.push({m,y,h:bh,w:bw,lines});y+=bh+8*s});const content=y-108*s,available=bottom-108*s,offset=Math.max(0,content-available)*scroll;items.forEach(({m,y:top,h:bh,w:bw,lines})=>{const yy=top-offset;if(yy+bh<92*s||yy>bottom)return;const x=m.sender==='sent'?w-bw-10*s:10*s;ctx.fillStyle=m.sender==='sent'?sent:received;rr(ctx,x,yy,bw,bh,10*s);ctx.fillStyle='#171717';ctx.font=(14*s)+'px Arial';lines.forEach((l,i)=>ctx.fillText(l,x+10*s,yy+18*s+i*18*s));ctx.font=(8*s)+'px monospace';ctx.fillStyle='#555';ctx.textAlign='right';ctx.fillText(m.time,x+bw-7*s,yy+bh-5*s);ctx.textAlign='left'});ctx.fillStyle='#f8f6ef';ctx.fillRect(0,h-62*s,w,62*s);ctx.fillStyle='#777';ctx.font=(12*s)+'px Arial';ctx.fillText('＋',13*s,h-27*s);ctx.strokeStyle='#ccc';rr(ctx,37*s,h-46*s,w-76*s,29*s,15*s,true);ctx.fillStyle='#777';ctx.fillText('Message',50*s,h-27*s);if(watermark){ctx.fillStyle='#17171766';ctx.font='bold '+(9*s)+'px monospace';ctx.textAlign='right';ctx.fillText('FAKECHAT / SIMULAÇÃO',w-9*s,h-72*s);ctx.textAlign='left'}}

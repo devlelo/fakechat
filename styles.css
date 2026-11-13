@@ -10,3 +10,23 @@
 @media(max-width:1050px){.editor-grid{grid-template-columns:270px minmax(300px,1fr) 270px}.hero{padding-left:5vw;padding-right:5vw}.hero h1{font-size:clamp(55px,8vw,95px)}}
 @media(max-width:800px){.head-links{gap:12px}.head-links a:not(.head-cta){display:none}.hero{grid-template-columns:1fr;min-height:auto;padding-top:48px}.hero-art{height:350px;width:min(100%,420px)}.art-card.main{right:8%;top:25px}.art-card.small{bottom:24px}.features,.steps{grid-template-columns:1fr}.feature{min-height:160px}.feature h3{margin-top:28px}.section{padding-top:55px;padding-bottom:55px}.section-head{display:block}.final-cta{display:block}.final-cta .btn-black{margin-top:22px}.editor-page{height:100dvh;min-height:0}.editor-head{height:52px;padding:0 13px}.editor-titlebar{height:57px;padding:0 14px}.editor-titlebar h1{font-size:18px}.editor-grid{display:block;position:relative;padding:0;overflow:hidden}.edit-column{position:absolute;inset:0;display:none}.edit-column.active{display:flex}.preview-column{position:absolute;inset:0;display:none}.preview-column.active{display:flex}.phone{height:min(67vh,590px);max-height:calc(100% - 50px)}.mobile-tabs{height:58px;flex:none;display:grid;grid-template-columns:repeat(3,1fr);background:var(--black);padding:5px;gap:4px}.mobile-tabs button{background:transparent;border:0;color:#b9b9ad;font:9px var(--mono);text-transform:uppercase}.mobile-tabs button.active{background:var(--lime);color:var(--black)}.col-scroll{padding:14px}.preview-top{top:10px}.preview-footer{bottom:8px}.site-foot{flex-direction:column;gap:8px}}
 @media(max-width:420px){.hero h1{font-size:55px}.hero-copy p{font-size:15px}.hero-art{height:310px}.art-card.main{width:245px}.art-card.small{width:175px}.editor-head .head-links{gap:8px}.editor-head .logo{font-size:16px}.editor-head .head-links a{font-size:8px}}
+
+/* WhatsApp-native conversation skin */
+.phone-screen[data-platform="whatsapp"]{background:#efeae2;color:#111b21}
+.phone-screen[data-platform="whatsapp"] .phone-status{background:#f0f2f5;color:#111b21}
+.phone-screen[data-platform="whatsapp"] .chat-header{height:55px;background:#f0f2f5;border:0;gap:8px;padding:0 8px}
+.phone-screen[data-platform="whatsapp"] .wa-back{font:27px Arial;color:#54656f;line-height:1}
+.phone-screen[data-platform="whatsapp"] .chat-avatar{width:34px;height:34px;border-radius:50%;background:#dce3e7;color:#54656f;font:10px var(--body)}
+.phone-screen[data-platform="whatsapp"] .chat-person{font-size:13px;font-weight:600;color:#111b21}
+.phone-screen[data-platform="whatsapp"] .chat-person small{font-size:10px;color:#667781;opacity:1;margin-top:2px}
+.phone-screen[data-platform="whatsapp"] .wa-actions{font:17px Arial;color:#54656f;white-space:nowrap}
+.phone-screen[data-platform="whatsapp"] .chat-body{background-color:#efeae2;background-image:radial-gradient(circle at 20% 30%,#d8d1c5 0 1px,transparent 1.5px),radial-gradient(circle at 75% 65%,#d8d1c5 0 1px,transparent 1.5px);background-size:26px 26px;padding:13px 9px}
+.phone-screen[data-platform="whatsapp"] .bubble{font-family:Arial,sans-serif;font-size:12px;color:#111b21;padding:7px 8px 5px;box-shadow:0 1px 1px #0002}
+.phone-screen[data-platform="whatsapp"] .bubble.received{background:#fff;border-radius:0 8px 8px 8px}
+.phone-screen[data-platform="whatsapp"] .bubble.sent{background:#d9fdd3;border-radius:8px 0 8px 8px}
+.phone-screen[data-platform="whatsapp"] .bubble .time{color:#667781;font-size:8px}
+.phone-screen[data-platform="whatsapp"] .chat-input{height:48px;background:#f0f2f5;gap:7px;padding:0 7px}
+.phone-screen[data-platform="whatsapp"] .chat-input .wa-plus,.phone-screen[data-platform="whatsapp"] .chat-input .wa-clip{font:21px Arial;color:#54656f}
+.phone-screen[data-platform="whatsapp"] .chat-input i{height:34px;border:0;border-radius:20px;background:white;display:flex;align-items:center;padding:0 12px}
+.phone-screen[data-platform="whatsapp"] .chat-input i small{font:12px Arial;color:#8696a0}
+.phone-screen[data-platform="whatsapp"] .chat-input .wa-mic{width:29px;height:29px;border-radius:50%;background:#00a884;color:white;display:grid;place-items:center;font-size:11px}
